@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AlgoWorks - Visualiser</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="nav-center">AlgoWorks</div>
+  </nav>
+
+  <h1>Sorting Algorithm Visualiser</h1>
+
+  <div class="controls">
+    <label for="barCount">Bars:</label>
+    <input type="range" id="barCount" min="5" max="50" value="15" oninput="updateBarCount(this.value)">
+    <span id="barCountValue">15</span>
+    <br><br>
+
+    <button onclick="startSorting('quick')">Quick Sort</button>
+    <button onclick="startSorting('bubble')">Bubble Sort</button>
+    <button onclick="startSorting('insertion')">Insertion Sort</button>
+    <button onclick="startSorting('selection')">Selection Sort</button>
+    <button onclick="startSorting('heap')">Heap Sort</button>
+    <button onclick="startSorting('merge')">Merge Sort</button>
+    <button onclick="startSorting('shell')">Shell Sort</button>
+  </div>
+
+  <div class="bar-container" id="bar-container"></div>
+
+  <div id="gen">
+  <button class ="Gen" onclick="generateArray()">Generate Array</button>
+  <button class ="Gen" onclick="stopSorting()">Stop Sorting</button>
+  <button class ="Gen" onclick="resetVisualization()">Reset</button>
+  <button class ="Gen" onclick="testSorting()">Test Sorting</button>
+  </div>
+
+  
+  <script src="script.js"></script>
+</body>
+</html>
