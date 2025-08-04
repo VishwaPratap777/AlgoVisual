@@ -644,21 +644,35 @@ function App() {
         { id: 1, value: 50, children: [2, 3] },
         { id: 2, value: 25, children: [4, 5] },
         { id: 3, value: 75, children: [6, 7] },
-        { id: 4, value: 12, children: [] },
-        { id: 5, value: 37, children: [] },
-        { id: 6, value: 62, children: [] },
-        { id: 7, value: 87, children: [] }
+        { id: 4, value: 12, children: [8, 9] },
+        { id: 5, value: 37, children: [10, 11] },
+        { id: 6, value: 62, children: [12, 13] },
+        { id: 7, value: 87, children: [14, 15] },
+        { id: 8, value: 6, children: [] },
+        { id: 9, value: 18, children: [] },
+        { id: 10, value: 31, children: [] },
+        { id: 11, value: 43, children: [] },
+        { id: 12, value: 55, children: [] },
+        { id: 13, value: 68, children: [] },
+        { id: 14, value: 80, children: [] },
+        { id: 15, value: 95, children: [] }
       ];
       setTreeData(tree);
     } else {
       const tree = [
         { id: 1, value: 'A', children: [2, 3, 4] },
-        { id: 2, value: 'B', children: [5, 6] },
-        { id: 3, value: 'C', children: [7] },
-        { id: 4, value: 'D', children: [] },
-        { id: 5, value: 'E', children: [] },
+        { id: 2, value: 'B', children: [5, 6, 7] },
+        { id: 3, value: 'C', children: [8, 9] },
+        { id: 4, value: 'D', children: [10] },
+        { id: 5, value: 'E', children: [11, 12] },
         { id: 6, value: 'F', children: [] },
-        { id: 7, value: 'G', children: [] }
+        { id: 7, value: 'G', children: [13] },
+        { id: 8, value: 'H', children: [] },
+        { id: 9, value: 'I', children: [] },
+        { id: 10, value: 'J', children: [] },
+        { id: 11, value: 'K', children: [] },
+        { id: 12, value: 'L', children: [] },
+        { id: 13, value: 'M', children: [] }
       ];
       setTreeData(tree);
     }
@@ -1150,32 +1164,7 @@ function App() {
 
       <div className="tree-container">
         <div className="tree-visualization">
-          {treeData.map((node) => (
-            <div key={node.id} className="tree-node">
-              <div className={`node-value ${
-                treeTraversal.includes(node.value) ? 'traversed' : ''
-              }`}>
-                {node.value}
-              </div>
-              {node.children.length > 0 && (
-                <div className="node-children">
-                  {node.children.map((childId) => {
-                    const childNode = treeData.find(n => n.id === childId);
-                    return childNode ? (
-                      <div key={childId} className="child-node">
-                        <div className="connection-line"></div>
-                        <div className={`node-value ${
-                          treeTraversal.includes(childNode.value) ? 'traversed' : ''
-                        }`}>
-                          {childNode.value}
-                        </div>
-                      </div>
-                    ) : null;
-                  })}
-                </div>
-              )}
-            </div>
-          ))}
+          {renderTreeNode(1, 0)}
         </div>
       </div>
 
@@ -1193,6 +1182,37 @@ function App() {
       )}
     </section>
   );
+
+  // Helper function to render tree nodes recursively
+  const renderTreeNode = (nodeId, level) => {
+    const node = treeData.find(n => n.id === nodeId);
+    if (!node) return null;
+
+    const isTraversed = treeTraversal.includes(node.value);
+    
+    return (
+      <div key={nodeId} className={`tree-node level-${level}`}>
+        <div className={`node-value ${isTraversed ? 'traversed' : ''}`}>
+          {node.value}
+        </div>
+        {node.children.length > 0 && (
+          <div className="node-children">
+            {node.children.map((childId, index) => {
+              const childNode = treeData.find(n => n.id === childId);
+              if (!childNode) return null;
+              
+              return (
+                <div key={childId} className="child-container">
+                  <div className="connection-line"></div>
+                  {renderTreeNode(childId, level + 1)}
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </div>
+    );
+  };
 
   return (
     <div className="app">
