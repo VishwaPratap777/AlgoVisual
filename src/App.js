@@ -4,8 +4,291 @@ import Navbar from './Navbar';
 
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
+// Loading Screen Component
+const LoadingScreen = ({ isLoading, onLoadingComplete }) => {
+  const [logoVisible, setLogoVisible] = useState(false);
+  const [textVisible, setTextVisible] = useState(false);
+  const [fadeOut, setFadeOut] = useState(false);
+
+  useEffect(() => {
+    const timeline = async () => {
+      // Wait a bit then show logo
+      await sleep(300);
+      setLogoVisible(true);
+      
+      // Wait for logo animation then show text
+      await sleep(800);
+      setTextVisible(true);
+      
+      // Wait then start fade out
+      await sleep(1500);
+      setFadeOut(true);
+      
+      // Complete loading after fade out
+      await sleep(800);
+      onLoadingComplete();
+    };
+    
+    if (isLoading) {
+      timeline();
+    }
+  }, [isLoading, onLoadingComplete]);
+
+  if (!isLoading) return null;
+
+  return (
+    <div className={`loading-screen ${fadeOut ? 'fade-out' : ''}`}>
+      <div className="loading-content">
+        <div className={`logo-container ${logoVisible ? 'visible' : ''}`}>
+          <div className="logo-symbol">
+            <div className="algo-bars">
+              <div className="bar bar-1"></div>
+              <div className="bar bar-2"></div>
+              <div className="bar bar-3"></div>
+              <div className="bar bar-4"></div>
+              <div className="bar bar-5"></div>
+            </div>
+          </div>
+          <h1 className={`logo-text ${textVisible ? 'visible' : ''}`}>
+            <span className="al">AL</span>
+            <span className="dash">-</span>
+            <span className="goth">GOTH</span>
+          </h1>
+          <p className={`tagline ${textVisible ? 'visible' : ''}`}>
+            Algorithm Visualizer
+          </p>
+        </div>
+        
+        <div className={`loading-bar-container ${textVisible ? 'visible' : ''}`}>
+          <div className="loading-bar">
+            <div className="loading-progress"></div>
+          </div>
+        </div>
+      </div>
+      
+
+      
+      <style jsx>{`
+        .loading-screen {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100vw;
+          height: 100vh;
+          background: linear-gradient(135deg,rgb(60, 58, 58) 0%,rgb(36, 36, 36) 50%,rgb(1, 0, 0) 100%);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          z-index: 9999;
+          overflow: hidden;
+          transition: opacity 0.7s ease-out, visibility 0.8s ease-out;
+        }
+        
+        .loading-screen.fade-out {
+          opacity: 0;
+          visibility: hidden;
+        }
+        
+        .loading-content {
+          text-align: center;
+          position: relative;
+          z-index: 2;
+        }
+        
+        .logo-container {
+          opacity: 0;
+          transform: translateY(50px) scale(0.8);
+          transition: all 1s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+        
+        .logo-container.visible {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+        
+        .logo-symbol {
+          margin-bottom: 2rem;
+          display: flex;
+          justify-content: center;
+        }
+        
+        .algo-bars {
+          display: flex;
+          align-items: flex-end;
+          gap: 8px;
+          height: 80px;
+        }
+        
+        .bar {
+          width: 12px;
+          background:rgb(255, 0, 0);
+          border-radius: 6px;
+          box-shadow: 0 0 20px rgba(255, 89, 89, 0.3);
+        }
+        
+        .bar-1 {
+          height: 20px;
+        }
+        
+        .bar-2 {
+          height: 40px;
+        }
+        
+        .bar-3 {
+          height: 60px;
+        }
+        
+        .bar-4 {
+          height: 45px;
+        }
+        
+        .bar-5 {
+          height: 25px;
+        }
+        
+        .logo-text {
+          font-size: 4rem;
+          font-weight: 900;
+          margin: 0;
+          opacity: 0;
+          transform: translateY(30px);
+          transition: all 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+          letter-spacing: 0.2em;
+        }
+        
+        .logo-text.visible {
+          opacity: 1;
+          transform: translateY(0);
+        }
+        
+        .al {
+          background: linear-gradient(135deg,rgb(255, 0, 0),rgb(204, 0, 0));
+          background-clip: text;
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          animation: glow 2s ease-in-out infinite alternate;
+        }
+        
+        .dash {
+          background: linear-gradient(135deg,rgb(255, 0, 0),rgb(204, 0, 0));
+          background-clip: text;
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          animation: glow 2s ease-in-out infinite alternate;
+          color:rgb(255, 17, 17);
+          margin: 0 0.2em;
+        }
+        
+        .goth {
+          background: linear-gradient(135deg,rgb(240, 40, 40),rgb(206, 0, 0));
+          background-clip: text;
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          animation: glow 2s ease-in-out infinite alternate;
+          animation-delay: 0.5s;
+        }
+        
+        @keyframes glow {
+          from {
+            text-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+          }
+          to {
+            text-shadow: 0 0 30px rgba(238, 104, 104, 0.8);
+          }
+        }
+        
+        .tagline {
+          font-size: 1.2rem;
+          color:rgb(255, 255, 255);
+          margin: 1rem 0 2rem 0;
+          opacity: 0;
+          transform: translateY(20px);
+          transition: all 0.6s ease-out 0.3s;
+          letter-spacing: 0.1em;
+          text-transform: uppercase;
+        }
+        
+        .tagline.visible {
+          opacity: 1;
+          transform: translateY(0);
+        }
+        
+        .loading-bar-container {
+          width: 300px;
+          margin: 0 auto;
+          opacity: 0;
+          transform: translateY(20px);
+          transition: all 0.6s ease-out 0.5s;
+        }
+        
+        .loading-bar-container.visible {
+          opacity: 1;
+          transform: translateY(0);
+        }
+        
+        .loading-bar {
+          width: 100%;
+          height: 4px;
+          background: rgba(255, 255, 255, 0.1);
+          border-radius: 2px;
+          overflow: hidden;
+          position: relative;
+        }
+        
+        .loading-progress {
+          height: 100%;
+          background: linear-gradient(90deg,rgb(133, 0, 0),rgb(207, 38, 38),rgb(199, 11, 11));
+          background-size: 200% 100%;
+          border-radius: 2px;
+          animation: loadingProgress 3s ease-in-out infinite;
+        }
+        
+        @keyframes loadingProgress {
+          0% {
+            transform: translateX(-100%);
+            background-position: 0% 50%;
+          }
+          50% {
+            background-position: 100% 50%;
+          }
+          100% {
+            transform: translateX(100%);
+            background-position: 0% 50%;
+          }
+        }
+        
+
+        
+        @media (max-width: 768px) {
+          .logo-text {
+            font-size: 2.5rem;
+          }
+          
+          .algo-bars {
+            height: 60px;
+          }
+          
+          .bar {
+            width: 8px;
+          }
+          
+          .loading-bar-container {
+            width: 250px;
+          }
+        }
+      `}</style>
+    </div>
+  );
+};
+
 function App() {
+  const [isLoading, setIsLoading] = useState(true);
   const [currentSection, setCurrentSection] = useState('sorting');
+  
+  // Loading screen handler
+  const handleLoadingComplete = () => {
+    setIsLoading(false);
+  };
   const [array, setArray] = useState([]);
   const [numBars, setNumBars] = useState(15);
   const [isSorting, setIsSorting] = useState(false);
@@ -1216,6 +1499,9 @@ function App() {
 
   return (
     <div className="app">
+      {/* Loading Screen */}
+      <LoadingScreen isLoading={isLoading} onLoadingComplete={handleLoadingComplete} />
+      
       {/* Navbar with dynamic classes for scroll animation */}
       <nav className={`navbar ${navbarHidden ? 'navbar-hidden' : 'navbar-visible'} ${navbarScrolled ? 'navbar-scrolled' : ''}`}>
         <div className="nav-container">
@@ -1254,7 +1540,7 @@ function App() {
                   setCurrentSection('bfs');
                 }}
               >
-                BFS
+                Pathfinding
               </a>
             </li>
             <li className="nav-item">
