@@ -311,7 +311,7 @@ function App() {
   
   // Tree states
   const [treeData, setTreeData] = useState([]);
-  const [treeTraversal, setTreeTraversal] = useState([]);
+  const [treeTraversal, setTreeTraversal] = useState([]);                                                             
   const [isTreeRunning, setIsTreeRunning] = useState(false);
   const [treeType, setTreeType] = useState('binary');
   
