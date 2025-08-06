@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import SearchVisualizer from './SearchVisualizer';
 import Navbar from './Navbar';
+import Footer from './Footer';
 
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -1579,6 +1580,7 @@ function App() {
         {currentSection === 'recursive' && renderRecursiveSection()}
         {currentSection === 'tree' && renderTreeSection()}
       </div>
+      <Footer />
     </div>
   );
 }
